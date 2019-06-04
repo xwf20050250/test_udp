@@ -25,7 +25,8 @@ type IChartInner interface {
 type ICharNormal interface {
 	Init()
 	Template() string
-	Build(dataArray string, subTitle string)
+	Build(dataArray string)
+	ConfigChart(params map[string]string)
 	Data() map[string]string
 	AddData(map[string][]interface{}, int64) []interface{}
 }
@@ -93,12 +94,15 @@ func (this *ChartBase) InitBase() {
 	this.chartData = make(map[string][]interface{})
 }
 
-func (this *ChartBase) Build(dataArray string, subTitleNew string) {
+func (this *ChartBase) ConfigChart(params map[string]string) {
+	for k, v := range params {
+		this.chartArgs[k] = v
+	}
+}
+
+func (this *ChartBase) Build(dataArray string) {
 	this.m.Lock()
 	this.chartArgs["DataArray"] = dataArray
-	if "" != subTitleNew {
-		this.chartArgs["SubTitle"] = this.SubTitle + "<br>" + subTitleNew
-	}
 	this.m.Unlock()
 }
 

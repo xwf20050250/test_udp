@@ -40,8 +40,13 @@ func (this *ChartServer) handler(w http.ResponseWriter, r *http.Request) {
 		xlog.Errorln("usage: http://your_ip:8000?query=cpu")
 		return
 	}
+
 	if _, ok := this.charts[chartname]; ok {
-		this.queryChart(chartname, w, r)
+		refreshTime := values.Get("rtime")
+		if refreshTime == "" {
+			refreshTime = "1"
+		}
+		this.queryChart(chartname, refreshTime, w, r)
 	} else if ok, path := this.isExistFile(chartname); ok {
 		this.queryChartFile(chartname, path, w, r)
 	} else {
@@ -50,7 +55,7 @@ func (this *ChartServer) handler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (this *ChartServer) queryChart(chartname string, w http.ResponseWriter, r *http.Request) {
+func (this *ChartServer) queryChart(chartname string, refreshTime string, w http.ResponseWriter, r *http.Request) {
 	now := time.Now().Unix()
 	chart := this.charts[chartname]
 	datas, subTitleNew := chart.Update(now)
@@ -59,7 +64,8 @@ func (this *ChartServer) queryChart(chartname string, w http.ResponseWriter, r *
 	json := simplejson.New()
 	json.Set("DataArray", outdatas)
 	b, _ := json.Get("DataArray").Encode()
-	chart.Build(string(b), subTitleNew)
+	chart.ConfigChart(map[string]string{"RefreshTime": refreshTime, "SubTitle": subTitleNew})
+	chart.Build(string(b))
 	if t, err := template.New("foo").Parse(chart.Template()); err != nil {
 		w.Write([]byte(err.Error()))
 	} else {
@@ -95,7 +101,7 @@ func (this *ChartServer) queryChartFile(chartname, path string, w http.ResponseW
 	json := simplejson.New()
 	json.Set("DataArray", outdatas)
 	b, _ := json.Get("DataArray").Encode()
-	chart.Build(string(b), "")
+	chart.Build(string(b))
 	if t, err := template.New("foo").Parse(chart.TemplateScrollBars()); err != nil {
 		w.Write([]byte(err.Error()))
 	} else {
