@@ -13,7 +13,7 @@ import (
 )
 
 type IChart interface {
-	Update(now int64) map[string][]interface{}
+	Update(now int64) (map[string][]interface{}, string)
 }
 
 type IChartInner interface {
@@ -25,7 +25,7 @@ type IChartInner interface {
 type ICharNormal interface {
 	Init()
 	Template() string
-	Build(dataArray string)
+	Build(dataArray string, subTitle string)
 	Data() map[string]string
 	AddData(map[string][]interface{}, int64) []interface{}
 }
@@ -93,9 +93,12 @@ func (this *ChartBase) InitBase() {
 	this.chartData = make(map[string][]interface{})
 }
 
-func (this *ChartBase) Build(dataArray string) {
+func (this *ChartBase) Build(dataArray string, subTitleNew string) {
 	this.m.Lock()
 	this.chartArgs["DataArray"] = dataArray
+	if "" != subTitleNew {
+		this.chartArgs["SubTitle"] = this.SubTitle + "<br>" + subTitleNew
+	}
 	this.m.Unlock()
 }
 

@@ -53,13 +53,13 @@ func (this *ChartServer) handler(w http.ResponseWriter, r *http.Request) {
 func (this *ChartServer) queryChart(chartname string, w http.ResponseWriter, r *http.Request) {
 	now := time.Now().Unix()
 	chart := this.charts[chartname]
-	datas := chart.Update(now)
+	datas, subTitleNew := chart.Update(now)
 	chart.SaveData(datas)
 	outdatas := chart.AddData(datas, now)
 	json := simplejson.New()
 	json.Set("DataArray", outdatas)
 	b, _ := json.Get("DataArray").Encode()
-	chart.Build(string(b))
+	chart.Build(string(b), subTitleNew)
 	if t, err := template.New("foo").Parse(chart.Template()); err != nil {
 		w.Write([]byte(err.Error()))
 	} else {
@@ -95,7 +95,7 @@ func (this *ChartServer) queryChartFile(chartname, path string, w http.ResponseW
 	json := simplejson.New()
 	json.Set("DataArray", outdatas)
 	b, _ := json.Get("DataArray").Encode()
-	chart.Build(string(b))
+	chart.Build(string(b), "")
 	if t, err := template.New("foo").Parse(chart.TemplateScrollBars()); err != nil {
 		w.Write([]byte(err.Error()))
 	} else {
