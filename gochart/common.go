@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -41,26 +42,43 @@ func GetSquareRoot(datas []int64) float32 {
 
 func GetSubtitle(details_avg map[string]float32, details_variance map[string]float32,
 	details_root map[string]float32) string {
+	var keys []string
+
 	ret_avg := "【平均值】"
 	contents_avg := []string{}
-	for k, v := range details_avg {
-		tmp := k + ": " + strconv.FormatFloat(float64(v), 'f', -1, 32)
+	keys = keys[:0]
+	for key := range details_avg {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	for _, key := range keys {
+		tmp := key + ": " + strconv.FormatFloat(float64(details_avg[key]), 'f', -1, 32)
 		contents_avg = append(contents_avg, tmp)
 	}
 	ret_avg += strings.Join(contents_avg, "  ")
 
 	ret_variance := "【方差】"
 	contents_variance := []string{}
-	for k, v := range details_variance {
-		tmp := k + ": " + strconv.FormatFloat(float64(v), 'f', -1, 32)
+	keys = keys[:0]
+	for key := range details_variance {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	for _, key := range keys {
+		tmp := key + ": " + strconv.FormatFloat(float64(details_variance[key]), 'f', -1, 32)
 		contents_variance = append(contents_variance, tmp)
 	}
 	ret_variance += strings.Join(contents_variance, "  ")
 
 	ret_root := "【标准差】"
 	contents_root := []string{}
-	for k, v := range details_root {
-		tmp := k + ": " + strconv.FormatFloat(float64(v), 'f', -1, 32)
+	keys = keys[:0]
+	for key := range details_root {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	for _, key := range keys {
+		tmp := key + ": " + strconv.FormatFloat(float64(details_root[key]), 'f', -1, 32)
 		contents_root = append(contents_root, tmp)
 	}
 	ret_root += strings.Join(contents_root, "  ")
