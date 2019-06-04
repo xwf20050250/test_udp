@@ -64,7 +64,7 @@ func (this *ChartServer) queryChart(chartname string, refreshTime string, w http
 	json := simplejson.New()
 	json.Set("DataArray", outdatas)
 	b, _ := json.Get("DataArray").Encode()
-	chart.ConfigChart(map[string]string{"RefreshTime": refreshTime, "SubTitle": subTitleNew})
+	chart.ConfigParams(map[string]string{"RefreshTime": refreshTime, "SubTitle": subTitleNew})
 	chart.Build(string(b))
 	if t, err := template.New("foo").Parse(chart.Template()); err != nil {
 		w.Write([]byte(err.Error()))

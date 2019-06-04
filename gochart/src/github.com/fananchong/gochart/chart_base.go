@@ -26,7 +26,7 @@ type ICharNormal interface {
 	Init()
 	Template() string
 	Build(dataArray string)
-	ConfigChart(params map[string]string)
+	ConfigParams(params map[string]string)
 	Data() map[string]string
 	AddData(map[string][]interface{}, int64) []interface{}
 }
@@ -94,7 +94,7 @@ func (this *ChartBase) InitBase() {
 	this.chartData = make(map[string][]interface{})
 }
 
-func (this *ChartBase) ConfigChart(params map[string]string) {
+func (this *ChartBase) ConfigParams(params map[string]string) {
 	for k, v := range params {
 		this.chartArgs[k] = v
 	}
