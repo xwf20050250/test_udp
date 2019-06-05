@@ -43,7 +43,7 @@ func (this *ChartServer) handler(w http.ResponseWriter, r *http.Request) {
 
 	if _, ok := this.charts[chartname]; ok {
 		refreshTime := values.Get("rtime")
-		if refreshTime == "" {
+		if refreshTime == "" || refreshTime == "0" {
 			refreshTime = "1"
 		}
 		this.queryChart(chartname, refreshTime, w, r)

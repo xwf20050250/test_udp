@@ -44,6 +44,7 @@ var TemplateTimeHtml = `{{define "T"}}
                 subtitle: {
                     // text: 'Source: WorldClimate.com',
                     text: '{{.SubTitle}}',
+                    align: 'left',
                 },
                 xAxis: {
                     type: 'datetime',

@@ -96,6 +96,9 @@ func (this *ChartBase) InitBase() {
 
 func (this *ChartBase) ConfigParams(params map[string]string) {
 	for k, v := range params {
+		if k == "SubTitle" {
+			v = "【备注项】" + this.SubTitle + "<br>" + v
+		}
 		this.chartArgs[k] = v
 	}
 }

@@ -57,7 +57,7 @@ func GetSubtitle(details_avg map[string]float32, details_variance map[string]flo
 	}
 	ret_avg += strings.Join(contents_avg, "  ")
 
-	ret_variance := "【方差】"
+	ret_variance := "【方差值】"
 	contents_variance := []string{}
 	keys = keys[:0]
 	for key := range details_variance {
